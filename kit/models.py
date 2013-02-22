@@ -16,6 +16,7 @@ CLOUDS = (
         ('TW', 'TW'),
         ('UK', 'UK'),
         ('US', 'US'),
+        ('gwms', 'gwms'),
         )
 
 QTYPE = (
