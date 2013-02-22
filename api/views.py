@@ -166,18 +166,18 @@ def jobs(request):
             queue = job.get('queue', None)
             localqueue = job.get('localqueue', None)
             
-            pq, created = PandaQueue.objects.get_or_create(name=nick)
-            if created:
-                msg = 'PandaQueue auto-created: %s (%s)' % (nick,factory)
-                logging.warn(msg)
-                pq.save()
-    
             f, created = Factory.objects.get_or_create(name=factory, defaults={'ip':ip})
             if created:
                 msg = "Factory auto-created: %s" % factory
                 logging.warn(msg)
             f.last_ncreated = len(jobs)
             f.save()
+
+            pq, created = PandaQueue.objects.get_or_create(name=nick)
+            if created:
+                msg = 'PandaQueue auto-created: %s (%s)' % (nick,factory)
+                logging.warn(msg)
+                pq.save()
     
             try: 
                 lab, created = Label.objects.get_or_create(name=label, fid=f, pandaq=pq)
