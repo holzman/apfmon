@@ -124,12 +124,13 @@ def job1(request, fid, cid):
     msgs = Message.objects.filter(job=job).order_by('received')
 
     date = ''
+    log = ''
     if f.factory_type != 'glideinWMS':
         date = "%d-%02d-%02d" % (job.created.year, job.created.month, job.created.day)
+        log = "%s/%s/%s/%s.log"
     # these need to come from Factory info
     out = "%s/%s/%s/%s.out"
     err = "%s/%s/%s/%s.err"
-    log = "%s/%s/%s/%s.log"
 
     dir = str(job.label).translate(string.maketrans('/:','__'))
 

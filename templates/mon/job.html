@@ -13,7 +13,9 @@
   <td><a href="{% url 'atl.mon.views.factory' job.fid.id %}">{{ job.fid }}</a>
 <tr>
   <td>JOB_ID
-  <td> {{ job.cid }} (<a href="{{ outurl }}">stdout</a>, <a href="{{ errurl }}">stderr</a>, <a href="{{ logurl }}">stdlog</a>, only recent logs)
+  <td> {{ job.cid }} (<a href="{{ outurl }}">stdout</a>, <a href="{{ errurl }}">stderr</a>,
+    {% if logurl and logurl.strip() %}<a href="{{ logurl }}">stdlog</a>,{% endif %}
+    only recent logs)
 <tr>
   <td>PANDAQ
   <td><a href="{% url 'atl.mon.views.pandaq' job.pandaq.id %}">{{ job.pandaq }}</a>
