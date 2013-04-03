@@ -43,6 +43,10 @@ except ImportError, err:
 
 ss = statsd.StatsClient(settings.GRAPHITE['host'], settings.GRAPHITE['port'])
 
+def log_and_save(obj, name):
+    logging.warn("%s auto-created: %s" % (obj.__class__.__name__, name))
+    obj.save()
+
 def job(request, id):
     """
     Handle requests from /jobs/{id} resource
@@ -173,7 +177,22 @@ def jobs(request):
             f.last_ncreated = len(jobs)
             f.save()
 
-            pq, created = PandaQueue.objects.get_or_create(name=nick)
+            if f.factory_type == 'glideinWMS':
+                # glideinWMS doesn't use AGIS.  Auto-create everything.
+                cloud, created = Cloud.objects.get_or_create(name="gwms")
+                ps_name = nick.replace("entry_", "")
+
+                site, created = Site.objects.get_or_create(name=ps_name, gocdbname=ps_name,
+                                                           cloud=cloud, pandasitename=ps_name)
+                if created: log_and_save(site, ps_name)
+
+                ps, created = PandaSite.objects.get_or_create(name=ps_name, site=site)
+                if created: log_and_save(ps, ps_name)
+
+                pq, created = PandaQueue.objects.get_or_create(name=nick, pandasite=ps)
+            else:
+                pq, created = PandaQueue.objects.get_or_create(name=nick)
+
             if created:
                 msg = 'PandaQueue auto-created: %s (%s)' % (nick,factory)
                 logging.warn(msg)
