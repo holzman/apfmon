@@ -77,11 +77,11 @@ class Factory(models.Model):
     """
     Represent a factory instance
     """
-    name = models.CharField(max_length=64, blank=True)
+    name = models.CharField(max_length=512, blank=True)
     ip = models.IPAddressField(blank=True)
     email = models.EmailField(blank=True)
     url = models.URLField(blank=True, verify_exists=False, default=DEFAULTURL)
-    version = models.CharField(max_length=64, blank=True)
+    version = models.CharField(max_length=512, blank=True)
     factory_type = models.CharField(max_length=20, choices=FACTORYTYPES, default='AutoPyFactory')
     last_modified = models.DateTimeField(auto_now=True, editable=False)
     last_startup = models.DateTimeField(editable=True, null=True)
@@ -94,7 +94,7 @@ class Label(models.Model):
     """
     Represents a factory queue
     """
-    name = models.CharField(max_length=64, blank=True)
+    name = models.CharField(max_length=512, blank=True)
     created = models.DateTimeField(auto_now_add=True, editable=False)
     fid = models.ForeignKey(Factory)
     pandaq = models.ForeignKey(PandaQueue)
@@ -113,7 +113,7 @@ class Job(models.Model):
     """
     Represent a condor pilot job
     """
-    jid = models.CharField(max_length=64, blank=False, unique=True)
+    jid = models.CharField(max_length=512, blank=False, unique=True)
     created = models.DateTimeField(auto_now_add=True, editable=False, db_index=True)
     cid = models.CharField(max_length=16, unique=False, blank=False)
     fid = models.ForeignKey(Factory)

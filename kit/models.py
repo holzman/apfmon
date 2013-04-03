@@ -63,7 +63,7 @@ class PandaSite(models.Model):
     """
     Represents a Panda Site (siteid), first column on 'clouds' page
     """
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=512)
     site = models.ForeignKey(Site, blank=True, null=True)
     tier = models.CharField(max_length=8, blank=True, null=True)
     def __unicode__(self):
@@ -75,7 +75,7 @@ class PandaQueue(models.Model):
     """
     Represents a Panda queue (nickname)
     """
-    name = models.CharField(max_length=64, unique=True)
+    name = models.CharField(max_length=512, unique=True)
     pandasite = models.ForeignKey(PandaSite, blank=True, null=True)
     state = models.CharField(max_length=16, blank=True, default='unknown')
     tags = models.ManyToManyField(Tag, blank=True)
