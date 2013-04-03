@@ -124,14 +124,23 @@ def job1(request, fid, cid):
     msgs = Message.objects.filter(job=job).order_by('received')
 
     date = ''
+    dir = str(job.label)
     if f.factory_type != 'glideinWMS':
+        dir = dir.translate(string.maketrans('/:','__'))
         date = "%d-%02d-%02d" % (job.created.year, job.created.month, job.created.day)
+    else:
+        print f.url
+        factory, fe, entryjob = dir.split(":")
+        path = "user_%s/glidein_%s/%s" % (fe, factory, entryjob)
+#        path = "user_%s" % dir.replace(":", "/GLIDEIN/")
+        dir = path
+
     # these need to come from Factory info
     out = "%s/%s/%s/%s.out"
     err = "%s/%s/%s/%s.err"
     log = "%s/%s/%s/%s.log"
 
-    dir = str(job.label).translate(string.maketrans('/:','__'))
+
 
     outurl = out % (f.url, date, dir, job.cid)
     errurl = err % (f.url, date, dir, job.cid)
